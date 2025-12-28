@@ -18,30 +18,34 @@ export default function MealsView() {
   const favoriteMeals = meals.filter(meal => meal.isFavorite);
 
   return (
-    <div className="h-full flex flex-col bg-gradient-to-br from-orange-50 to-yellow-50 overflow-hidden">
+    <div className="h-full flex flex-col overflow-hidden">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 p-6 shadow-sm">
-        <div className="flex items-center justify-between mb-4">
+      <div className="bg-white/80 backdrop-blur-sm p-8 shadow-sm">
+        <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-3xl font-bold text-gray-800">🍽️ Meal Menu</h1>
-            <p className="text-gray-600 mt-1">Plan and organize family meals</p>
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent flex items-center gap-3">
+              <span className="text-4xl">🍽️</span>
+              <span>Meal Menu</span>
+            </h1>
+            <p className="text-gray-500 mt-2 text-lg">Plan and organize family meals</p>
           </div>
           <button
             onClick={() => setIsAddingMeal(true)}
-            className="px-6 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 font-medium shadow-lg hover:shadow-xl transition-all"
+            className="bg-gradient-to-r from-orange-500 to-amber-500 text-white px-6 py-3 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105 flex items-center gap-2"
           >
-            + New Meal
+            <span className="text-xl">+</span>
+            <span>New Meal</span>
           </button>
         </div>
 
         {/* Filter Tabs */}
-        <div className="flex gap-2 overflow-x-auto pb-2">
+        <div className="flex gap-3 overflow-x-auto pb-2">
           <button
             onClick={() => setFilterCategory('all')}
-            className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
+            className={`px-5 py-2.5 rounded-full text-sm font-semibold whitespace-nowrap transition-all ${
               filterCategory === 'all'
-                ? 'bg-orange-600 text-white shadow-md'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg scale-105'
+                : 'bg-white text-gray-600 hover:bg-gray-50 shadow-sm border border-gray-200'
             }`}
           >
             All Meals
@@ -50,10 +54,10 @@ export default function MealsView() {
             <button
               key={category}
               onClick={() => setFilterCategory(category)}
-              className={`px-4 py-2 rounded-full text-sm font-medium capitalize whitespace-nowrap transition-all ${
+              className={`px-5 py-2.5 rounded-full text-sm font-semibold capitalize whitespace-nowrap transition-all ${
                 filterCategory === category
-                  ? 'bg-orange-600 text-white shadow-md'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg scale-105'
+                  : 'bg-white text-gray-600 hover:bg-gray-50 shadow-sm border border-gray-200'
               }`}
             >
               {category}

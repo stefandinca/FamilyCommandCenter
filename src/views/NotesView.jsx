@@ -19,25 +19,29 @@ export default function NotesView() {
   const unpinnedNotes = notes.filter(note => !note.pinned);
 
   return (
-    <div className="h-full flex flex-col bg-gradient-to-br from-gray-50 to-blue-50 overflow-hidden">
+    <div className="h-full flex flex-col overflow-hidden">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 p-6 shadow-sm">
+      <div className="bg-white/80 backdrop-blur-sm p-8 shadow-sm">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-800">📝 Notes</h1>
-            <p className="text-gray-600 mt-1">Keep track of family notes and lists</p>
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent flex items-center gap-3">
+              <span className="text-4xl">📝</span>
+              <span>Notes</span>
+            </h1>
+            <p className="text-gray-500 mt-2 text-lg">Keep track of family notes and lists</p>
           </div>
           <button
             onClick={() => setIsAddingNote(true)}
-            className="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 font-medium shadow-lg hover:shadow-xl transition-all"
+            className="btn-primary flex items-center gap-2"
           >
-            + New Note
+            <span className="text-xl">+</span>
+            <span>New Note</span>
           </button>
         </div>
       </div>
 
       {/* Notes Grid */}
-      <div className="flex-1 overflow-y-auto p-6">
+      <div className="flex-1 overflow-y-auto p-8">
         {/* Pinned Section */}
         {pinnedNotes.length > 0 && (
           <div className="mb-8">

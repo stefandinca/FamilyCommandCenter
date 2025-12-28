@@ -18,25 +18,29 @@ export default function ShoppingView() {
   const shoppingLists = notes.filter(note => note.type === 'shopping');
 
   return (
-    <div className="h-full flex flex-col bg-gradient-to-br from-green-50 to-emerald-50 overflow-hidden">
+    <div className="h-full flex flex-col overflow-hidden">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 p-6 shadow-sm">
+      <div className="bg-white/80 backdrop-blur-sm p-8 shadow-sm">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-800">🛒 Shopping Lists</h1>
-            <p className="text-gray-600 mt-1">Manage your shopping and errands</p>
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent flex items-center gap-3">
+              <span className="text-4xl">🛒</span>
+              <span>Shopping Lists</span>
+            </h1>
+            <p className="text-gray-500 mt-2 text-lg">Manage your shopping and errands</p>
           </div>
           <button
             onClick={() => setIsAddingList(true)}
-            className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium shadow-lg hover:shadow-xl transition-all"
+            className="bg-gradient-to-r from-emerald-500 to-green-500 text-white px-6 py-3 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105 flex items-center gap-2"
           >
-            + New List
+            <span className="text-xl">+</span>
+            <span>New List</span>
           </button>
         </div>
       </div>
 
       {/* Shopping Lists Grid */}
-      <div className="flex-1 overflow-y-auto p-6">
+      <div className="flex-1 overflow-y-auto p-8">
         {shoppingLists.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {shoppingLists.map(list => (

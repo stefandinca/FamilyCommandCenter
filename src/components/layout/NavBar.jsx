@@ -13,34 +13,45 @@ export default function NavBar() {
   ];
 
   return (
-    <div className="flex flex-col h-full bg-gray-900 text-white w-16">
+    <div className="flex flex-col h-full bg-gradient-to-b from-violet-600 via-purple-600 to-indigo-700 text-white w-20 shadow-2xl">
       {/* Logo/App Icon */}
-      <div className="flex items-center justify-center h-16 border-b border-gray-700">
-        <div className="text-2xl">👨‍👩‍👧‍👦</div>
+      <div className="flex items-center justify-center h-24 mb-4">
+        <div className="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center text-3xl shadow-lg border border-white/30">
+          👨‍👩‍👧‍👦
+        </div>
       </div>
 
       {/* Nav Items */}
-      <nav className="flex-1 py-4">
-        <div className="flex flex-col gap-2">
+      <nav className="flex-1 px-3">
+        <div className="flex flex-col gap-3">
           {navItems.map((item) => (
             <button
               key={item.id}
               onClick={() => setActiveView(item.id)}
-              className={`nav-item flex items-center justify-center p-4 transition-all duration-200 relative group
-                ${activeView === item.id ? 'bg-blue-600 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800'}`}
+              className={`nav-item flex items-center justify-center p-4 rounded-2xl transition-all duration-300 relative group
+                ${activeView === item.id
+                  ? 'bg-white text-violet-600 shadow-lg scale-110'
+                  : 'text-white/70 hover:text-white hover:bg-white/10 hover:scale-105'}`}
               title={item.label}
             >
               {item.icon}
               {/* Tooltip */}
-              <span className="absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded
+              <span className="absolute left-full ml-4 px-4 py-2 bg-gray-900 text-white text-sm rounded-xl
                            opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap
-                           transition-opacity duration-200 z-50">
+                           transition-all duration-200 z-50 shadow-xl font-medium">
                 {item.label}
               </span>
             </button>
           ))}
         </div>
       </nav>
+
+      {/* Bottom Section */}
+      <div className="p-3 mb-4">
+        <div className="w-full h-14 bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center border border-white/20">
+          <span className="text-xs font-bold opacity-70">FamilySync</span>
+        </div>
+      </div>
     </div>
   );
 }

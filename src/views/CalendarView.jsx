@@ -87,15 +87,15 @@ export default function CalendarView() {
   });
 
   return (
-    <div className="h-full flex flex-col bg-gray-50 overflow-hidden">
+    <div className="h-full flex flex-col overflow-hidden">
       {/* Header with Calendar Selector */}
-      <div className="bg-white border-b border-gray-200 p-4 shadow-sm">
-        <div className="flex items-center justify-between gap-4 mb-3">
+      <div className="bg-white/80 backdrop-blur-sm p-6 shadow-sm">
+        <div className="flex items-center justify-between gap-6 mb-4">
           {/* Left: Date selector */}
           <div className="flex items-center gap-4">
             <button
               onClick={handleToday}
-              className="px-4 py-2 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition-all"
+              className="btn-secondary"
             >
               Today
             </button>
@@ -112,15 +112,18 @@ export default function CalendarView() {
           {/* Right: Add Event button */}
           <button
             onClick={() => setIsAddingEvent(true)}
-            className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium shadow-lg hover:shadow-xl transition-all"
+            className="btn-primary flex items-center gap-2"
           >
-            + Add Event
+            <span className="text-xl">+</span>
+            <span>Add Event</span>
           </button>
         </div>
 
         {/* Selected Date Display */}
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-800">{formattedDate}</h2>
+        <div className="text-center bg-gradient-to-r from-violet-50 to-purple-50 rounded-2xl py-4 px-6">
+          <h2 className="text-3xl font-bold bg-gradient-to-r from-violet-600 to-purple-600 bg-clip-text text-transparent">
+            {formattedDate}
+          </h2>
         </div>
       </div>
 
@@ -439,7 +442,7 @@ function EventCard({ event, onClick }) {
   return (
     <div
       onClick={(e) => { e.stopPropagation(); onClick(); }}
-      className="absolute left-1 right-1 rounded-md p-2 cursor-pointer shadow-sm hover:shadow-md hover:scale-[1.02] transition-all z-10 text-white overflow-hidden"
+      className="absolute left-2 right-2 rounded-xl p-3 cursor-pointer shadow-md hover:shadow-xl hover:scale-[1.03] transition-all z-10 text-white overflow-hidden border-2 border-white/30"
       style={{
         top: `${top}px`,
         height: `${height}px`,
@@ -448,12 +451,19 @@ function EventCard({ event, onClick }) {
       }}
       title={event.title}
     >
-      <div className="font-semibold text-xs leading-tight">{event.title}</div>
-      <div className="text-[10px] opacity-90 mt-0.5">{formatTime(startTime)}</div>
-      {height > 50 && (
-        <div className="flex gap-1 mt-1 text-[10px]">
-          {event.location?.name && <span>📍</span>}
-          {event.checklist?.length > 0 && <span>✓</span>}
+      <div className="font-bold text-sm leading-tight drop-shadow-sm">{event.title}</div>
+      <div className="text-xs opacity-95 mt-1 font-medium">{formatTime(startTime)}</div>
+      {height > 60 && (
+        <div className="flex gap-2 mt-2 text-xs flex-wrap">
+          {event.location?.name && (
+            <span className="bg-white/20 backdrop-blur-sm px-2 py-0.5 rounded-full flex items-center gap-1">
+              <span>📍</span>
+              <span className="text-[10px]">{event.location.name}</span>
+            </span>
+          )}
+          {event.checklist?.length > 0 && (
+            <span className="bg-white/20 backdrop-blur-sm px-2 py-0.5 rounded-full">✓</span>
+          )}
         </div>
       )}
     </div>

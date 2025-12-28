@@ -22,25 +22,29 @@ export default function UsersView() {
   const [editingMemberId, setEditingMemberId] = useState(null);
 
   return (
-    <div className="h-full flex flex-col bg-gradient-to-br from-indigo-50 to-blue-50 overflow-hidden">
+    <div className="h-full flex flex-col overflow-hidden">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 p-6 shadow-sm">
+      <div className="bg-white/80 backdrop-blur-sm p-8 shadow-sm">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-800">👥 Family Members</h1>
-            <p className="text-gray-600 mt-1">Manage your family member profiles</p>
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent flex items-center gap-3">
+              <span className="text-4xl">👥</span>
+              <span>Family Members</span>
+            </h1>
+            <p className="text-gray-500 mt-2 text-lg">Manage your family member profiles</p>
           </div>
           <button
             onClick={() => setIsAddingMember(true)}
-            className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium shadow-lg hover:shadow-xl transition-all"
+            className="bg-gradient-to-r from-indigo-500 to-blue-500 text-white px-6 py-3 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105 flex items-center gap-2"
           >
-            + Add Member
+            <span className="text-xl">+</span>
+            <span>Add Member</span>
           </button>
         </div>
       </div>
 
       {/* Members Grid */}
-      <div className="flex-1 overflow-y-auto p-6">
+      <div className="flex-1 overflow-y-auto p-8">
         {members.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {members.map(member => (

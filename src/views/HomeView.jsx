@@ -70,19 +70,21 @@ export default function HomeView() {
   });
 
   return (
-    <div className="h-full flex flex-col bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 overflow-hidden">
+    <div className="h-full flex flex-col overflow-hidden">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 p-6 shadow-sm">
+      <div className="bg-white/80 backdrop-blur-sm p-8 shadow-sm">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-800">🏠 Home</h1>
-            <p className="text-gray-600 mt-1">Family dashboard overview</p>
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-violet-600 to-purple-600 bg-clip-text text-transparent">
+              Good {now.getHours() < 12 ? 'morning' : now.getHours() < 18 ? 'afternoon' : 'evening'}!
+            </h1>
+            <p className="text-gray-500 mt-2 text-lg">Here's what's happening with your family</p>
           </div>
-          <div className="text-right">
-            <p className="text-sm text-gray-500">
-              {now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+          <div className="text-right bg-gradient-to-br from-violet-500 to-purple-600 text-white px-8 py-4 rounded-2xl shadow-lg">
+            <p className="text-sm font-medium opacity-90">
+              {now.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}
             </p>
-            <p className="text-2xl font-bold text-gray-800">
+            <p className="text-3xl font-bold mt-1">
               {now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
             </p>
           </div>
@@ -90,12 +92,13 @@ export default function HomeView() {
       </div>
 
       {/* Dashboard Content */}
-      <div className="flex-1 overflow-y-auto p-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="flex-1 overflow-y-auto p-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Who's Where Section */}
-          <div className="bg-white rounded-xl shadow-md p-6 border border-gray-200">
-            <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-              📍 Who's Where
+          <div className="card-modern p-8">
+            <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+              <span className="text-3xl">📍</span>
+              <span>Who's Where</span>
             </h2>
             <div className="space-y-3">
               {memberStatus.map(({ member, status, event }) => (
@@ -113,9 +116,10 @@ export default function HomeView() {
           </div>
 
           {/* Upcoming Events Section */}
-          <div className="bg-white rounded-xl shadow-md p-6 border border-gray-200">
-            <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-              📅 Upcoming Events
+          <div className="card-modern p-8">
+            <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+              <span className="text-3xl">📅</span>
+              <span>Upcoming Events</span>
             </h2>
             <div className="space-y-3">
               {upcomingEvents.map(event => (
@@ -133,9 +137,10 @@ export default function HomeView() {
           </div>
 
           {/* Pinned Notes Section */}
-          <div className="bg-white rounded-xl shadow-md p-6 border border-gray-200">
-            <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-              📌 Pinned Notes
+          <div className="card-modern p-8">
+            <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+              <span className="text-3xl">📌</span>
+              <span>Pinned Notes</span>
             </h2>
             <div className="space-y-3">
               {pinnedNotes.map(note => (
@@ -152,9 +157,10 @@ export default function HomeView() {
           </div>
 
           {/* Shopping Lists Section */}
-          <div className="bg-white rounded-xl shadow-md p-6 border border-gray-200">
-            <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-              🛒 Shopping Lists
+          <div className="card-modern p-8">
+            <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+              <span className="text-3xl">🛒</span>
+              <span>Shopping Lists</span>
             </h2>
             <div className="space-y-3">
               {pinnedShoppingLists.map(list => (
@@ -253,21 +259,21 @@ function MemberStatusCard({ member, status, event }) {
   };
 
   return (
-    <div className={`flex items-center gap-3 p-3 rounded-lg border ${getStatusColor()} transition-all`}>
+    <div className={`flex items-center gap-4 p-4 rounded-2xl border-2 ${getStatusColor()} transition-all hover:scale-[1.02] shadow-sm`}>
       <div className="relative">
         <img
           src={member.avatar}
           alt={member.name}
-          className="w-12 h-12 rounded-full border-2 border-white"
+          className="w-14 h-14 rounded-2xl border-3 border-white shadow-md"
         />
         <div
-          className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white"
+          className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-3 border-white shadow-sm"
           style={{ backgroundColor: COLORS[member.color] || '#6B7280' }}
         />
       </div>
       <div className="flex-1">
-        <p className="font-semibold text-sm">{member.name}</p>
-        <p className="text-xs opacity-80">{getStatusText()}</p>
+        <p className="font-bold text-base">{member.name}</p>
+        <p className="text-sm opacity-80 mt-0.5">{getStatusText()}</p>
       </div>
     </div>
   );
@@ -297,33 +303,43 @@ function UpcomingEventCard({ event, members, onClick }) {
   return (
     <div
       onClick={onClick}
-      className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200 hover:shadow-md transition-all cursor-pointer hover:bg-gray-100"
+      className="card-modern-hover p-5 cursor-pointer group"
     >
-      <div className="text-center min-w-[60px]">
-        <p className="text-xs font-semibold text-gray-500 uppercase">{getDateLabel()}</p>
-        <p className="text-lg font-bold text-gray-800">
-          {startTime.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
-        </p>
-      </div>
-      <div className="flex-1">
-        <h3 className="font-semibold text-gray-800">{event.title}</h3>
-        {event.location?.name && (
-          <p className="text-xs text-gray-600 mt-1">📍 {event.location.name}</p>
-        )}
-        {assignedMembers.length > 0 && (
-          <div className="flex gap-1 mt-2">
-            {assignedMembers.map(member => (
-              <img
-                key={member.id}
-                src={member.avatar}
-                alt={member.name}
-                title={member.name}
-                className="w-6 h-6 rounded-full border-2 border-white"
-                style={{ borderColor: COLORS[member.color] || '#6B7280' }}
-              />
-            ))}
-          </div>
-        )}
+      <div className="flex items-start gap-4">
+        <div className="bg-gradient-to-br from-violet-500 to-purple-600 text-white rounded-2xl px-4 py-3 text-center min-w-[80px] shadow-lg">
+          <p className="text-xs font-bold opacity-90 uppercase">{getDateLabel()}</p>
+          <p className="text-xl font-bold mt-1">
+            {startTime.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
+          </p>
+        </div>
+        <div className="flex-1">
+          <h3 className="font-bold text-gray-800 text-lg group-hover:text-violet-600 transition-colors">{event.title}</h3>
+          {event.location?.name && (
+            <p className="text-sm text-gray-600 mt-2 flex items-center gap-2">
+              <span>📍</span>
+              <span>{event.location.name}</span>
+            </p>
+          )}
+          {assignedMembers.length > 0 && (
+            <div className="flex gap-2 mt-3 items-center">
+              <div className="flex -space-x-2">
+                {assignedMembers.slice(0, 3).map(member => (
+                  <img
+                    key={member.id}
+                    src={member.avatar}
+                    alt={member.name}
+                    title={member.name}
+                    className="w-8 h-8 rounded-full border-3 border-white shadow-sm"
+                    style={{ borderColor: COLORS[member.color] || '#6B7280' }}
+                  />
+                ))}
+              </div>
+              {assignedMembers.length > 3 && (
+                <span className="text-xs font-medium text-gray-500">+{assignedMembers.length - 3} more</span>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -346,16 +362,19 @@ function PinnedNoteCard({ note, onClick }) {
   return (
     <div
       onClick={onClick}
-      className={`p-3 rounded-lg border-2 ${colorConfig.border} ${colorConfig.bg} cursor-pointer hover:shadow-md transition-all`}
+      className={`p-5 rounded-2xl border-2 ${colorConfig.border} ${colorConfig.bg} cursor-pointer hover:shadow-lg transition-all hover:scale-[1.02]`}
     >
-      <h3 className={`font-semibold ${colorConfig.text} mb-1`}>{note.title}</h3>
+      <h3 className={`font-bold text-lg ${colorConfig.text} mb-2`}>{note.title}</h3>
       {note.content && (
-        <p className={`text-xs ${colorConfig.text} opacity-80 mb-2 line-clamp-2`}>{note.content}</p>
+        <p className={`text-sm ${colorConfig.text} opacity-80 mb-3 line-clamp-2`}>{note.content}</p>
       )}
       {totalCount > 0 && (
-        <p className={`text-xs ${colorConfig.text} font-medium`}>
-          {completedCount}/{totalCount} items completed
-        </p>
+        <div className={`flex items-center gap-2 text-sm ${colorConfig.text} font-semibold`}>
+          <div className="w-6 h-6 rounded-full bg-white/50 flex items-center justify-center text-xs">
+            ✓
+          </div>
+          <span>{completedCount}/{totalCount} completed</span>
+        </div>
       )}
     </div>
   );
@@ -369,21 +388,23 @@ function ShoppingListCard({ list, onClick }) {
   return (
     <div
       onClick={onClick}
-      className="p-3 bg-green-50 rounded-lg border-2 border-green-300 cursor-pointer hover:shadow-md transition-all"
+      className="p-5 bg-gradient-to-br from-emerald-50 to-green-50 rounded-2xl border-2 border-emerald-300 cursor-pointer hover:shadow-lg transition-all hover:scale-[1.02]"
     >
-      <div className="flex items-center justify-between mb-2">
-        <h3 className="font-semibold text-green-900">{list.title}</h3>
-        <span className="text-xs text-green-700 font-medium">{Math.round(progress)}%</span>
+      <div className="flex items-center justify-between mb-3">
+        <h3 className="font-bold text-lg text-emerald-900">{list.title}</h3>
+        <span className="px-3 py-1 bg-emerald-500 text-white text-sm font-bold rounded-full">
+          {Math.round(progress)}%
+        </span>
       </div>
       {totalCount > 0 && (
         <>
-          <div className="w-full bg-green-200 rounded-full h-2 mb-2">
+          <div className="w-full bg-emerald-200 rounded-full h-3 mb-3 shadow-inner">
             <div
-              className="bg-green-600 h-2 rounded-full transition-all"
+              className="bg-gradient-to-r from-emerald-500 to-green-600 h-3 rounded-full transition-all shadow-sm"
               style={{ width: `${progress}%` }}
             />
           </div>
-          <p className="text-xs text-green-800">
+          <p className="text-sm text-emerald-800 font-semibold">
             {completedCount} of {totalCount} items
           </p>
         </>
