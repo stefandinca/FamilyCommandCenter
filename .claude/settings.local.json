@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -m http.server:*)",
+      "Bash(timeout 2 bash -c \"curl -s http://localhost:8000 > /dev/null && echo ''Server is running!''\")"
+    ]
+  }
+}
