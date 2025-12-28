@@ -1,77 +1,13 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="theme-color" content="#3B82F6">
-
-  <title>FamilySync - Family Command Center</title>
-
-  <!-- PWA Manifest -->
-  <link rel="manifest" href="./manifest.json">
-
-  <!-- Favicon -->
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👨‍👩‍👧‍👦</text></svg>">
-
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
-
-  <!-- Custom Styles -->
-  <link rel="stylesheet" href="./assets/css/styles.css">
-
-  <!-- Tailwind Config Inline (development) -->
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            'dad': '#3B82F6',      // Blue
-            'mom': '#EC4899',      // Pink
-            'kid1': '#10B981',     // Green
-            'kid2': '#F59E0B',     // Orange
-            'family': '#8B5CF6'    // Purple
-          },
-          spacing: {
-            'timeline': '60px'     // 60px per hour
-          }
-        }
-      }
-    }
-  </script>
-</head>
-<body class="bg-gray-50 font-sans antialiased">
-
-  <!-- App Container -->
-  <div id="app" class="h-screen overflow-hidden">
-    <!-- Three-pane layout will be injected here -->
-    <div class="flex h-full">
-      <!-- Left Pane -->
-      <aside id="left-pane" class="w-72 bg-white/80 backdrop-blur-md border-r border-gray-200">
-        <!-- Left pane content -->
-      </aside>
-
-      <!-- Middle Pane (Timeline) -->
-      <main id="middle-pane" class="flex-1 overflow-y-auto bg-gradient-to-br from-gray-50 to-blue-50">
-        <!-- Timeline content -->
-      </main>
-
-      <!-- Right Pane -->
-      <aside id="right-pane" class="w-96 bg-white/90 backdrop-blur-md border-l border-gray-200 overflow-y-auto">
-        <!-- Right pane content -->
-      </aside>
-    </div>
-  </div>
-
-  <!-- Modals will be rendered here -->
-  <div id="modal-root"></div>
-
-  <!-- Toast notifications -->
-  <div id="toast-container" class="fixed bottom-4 right-4 z-50"></div>
-
-  <!-- App Script (ES6 Module) -->
-  <script type="module" src="./assets/js/app.js"></script>
-
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>family-command-center</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>

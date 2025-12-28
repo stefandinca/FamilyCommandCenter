@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Ensure modals can be displayed properly */
+html, body {
+  overflow-x: hidden;
+}
+
+#root {
+  overflow: hidden;
+}
+
+/* Custom scrollbar styles */
+@layer utilities {
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: #f3f4f6;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: #9ca3af;
+    border-radius: 999px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: #6b7280;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
