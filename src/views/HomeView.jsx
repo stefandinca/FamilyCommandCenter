@@ -281,10 +281,14 @@ function MemberStatusCard({ member, status, event }) {
 
 function UpcomingEventCard({ event, members, onClick }) {
   const startTime = new Date(event.startTime);
+  const endTime = new Date(event.endTime);
   const isToday = startTime.toDateString() === new Date().toDateString();
   const isTomorrow = startTime.toDateString() === new Date(Date.now() + 86400000).toDateString();
 
   const getDateLabel = () => {
+    if (event.isMultiDay) {
+      return startTime.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
     if (isToday) return 'Today';
     if (isTomorrow) return 'Tomorrow';
     return startTime.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
@@ -306,11 +310,20 @@ function UpcomingEventCard({ event, members, onClick }) {
       className="card-modern-hover p-5 cursor-pointer group"
     >
       <div className="flex items-start gap-4">
-        <div className="bg-gradient-to-br from-violet-500 to-purple-600 text-white rounded-2xl px-4 py-3 text-center min-w-[80px] shadow-lg">
+        <div className={`bg-gradient-to-br ${event.isMultiDay ? 'from-orange-500 to-amber-500' : 'from-violet-500 to-purple-600'} text-white rounded-2xl px-4 py-3 text-center min-w-[80px] shadow-lg`}>
           <p className="text-xs font-bold opacity-90 uppercase">{getDateLabel()}</p>
-          <p className="text-xl font-bold mt-1">
-            {startTime.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
-          </p>
+          {event.isMultiDay ? (
+            <div className="mt-1">
+              <p className="text-sm font-bold">→</p>
+              <p className="text-xs font-bold opacity-90">
+                {endTime.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+              </p>
+            </div>
+          ) : (
+            <p className="text-xl font-bold mt-1">
+              {startTime.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
+            </p>
+          )}
         </div>
         <div className="flex-1">
           <h3 className="font-bold text-gray-800 text-lg group-hover:text-violet-600 transition-colors">{event.title}</h3>
@@ -698,9 +711,18 @@ function EventDetailModal({ eventId, onClose, onEdit }) {
           <div className="flex items-start justify-between">
             <div className="flex-1">
               <h2 className="text-2xl font-bold text-gray-800 mb-2">{event.title}</h2>
-              <p className="text-gray-600">
-                {startTime.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
-              </p>
+              {event.isMultiDay ? (
+                <div className="flex items-center gap-2">
+                  <span className="text-2xl">🏖️</span>
+                  <p className="text-gray-600">
+                    {startTime.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - {endTime.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                  </p>
+                </div>
+              ) : (
+                <p className="text-gray-600">
+                  {startTime.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                </p>
+              )}
             </div>
             <button
               onClick={onClose}
@@ -713,13 +735,24 @@ function EventDetailModal({ eventId, onClose, onEdit }) {
 
         {/* Content */}
         <div className="flex-1 overflow-y-auto p-6 space-y-4">
-          {/* Time */}
-          <div>
-            <h3 className="text-sm font-semibold text-gray-500 uppercase mb-2">Time</h3>
-            <p className="text-lg text-gray-800">
-              {formatTime(startTime)} - {formatTime(endTime)}
-            </p>
-          </div>
+          {/* Time/Duration */}
+          {!event.isMultiDay && (
+            <div>
+              <h3 className="text-sm font-semibold text-gray-500 uppercase mb-2">Time</h3>
+              <p className="text-lg text-gray-800">
+                {formatTime(startTime)} - {formatTime(endTime)}
+              </p>
+            </div>
+          )}
+
+          {event.isMultiDay && (
+            <div>
+              <h3 className="text-sm font-semibold text-gray-500 uppercase mb-2">Duration</h3>
+              <p className="text-lg text-gray-800">
+                {Math.ceil((endTime - startTime) / (1000 * 60 * 60 * 24))} days
+              </p>
+            </div>
+          )}
 
           {/* Assigned Members */}
           {assignedMembers.length > 0 && (

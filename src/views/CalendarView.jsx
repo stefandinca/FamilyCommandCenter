@@ -89,7 +89,7 @@ export default function CalendarView() {
   return (
     <div className="h-full flex flex-col overflow-hidden">
       {/* Header with Calendar Selector */}
-      <div className="bg-white/80 backdrop-blur-sm p-6 shadow-sm">
+      <div className="bg-white/80 backdrop-blur-sm p-6 shadow-sm relative z-50">
         <div className="flex items-center justify-between gap-6 mb-4">
           {/* Left: Date selector */}
           <div className="flex items-center gap-4">
@@ -392,31 +392,65 @@ function Timeline({ onEventClick }) {
 
 function Swimlane({ member, events, currentDate, onEventClick, onHeaderClick }) {
   const memberColor = getMemberColor(member.color);
+  const targetDate = new Date(currentDate);
 
-  // Filter events for this member on this day
+  // Filter multi-day events that overlap with current date for this member
+  const multiDayEvents = events.filter(event => {
+    if (!event.isMultiDay) return false;
+    if (!event.assignedTo?.includes(member.id)) return false;
+
+    const eventStart = new Date(event.startTime);
+    const eventEnd = new Date(event.endTime);
+
+    // Check if target date falls within the event range
+    return targetDate >= eventStart && targetDate <= eventEnd;
+  });
+
+  // Filter regular single-day events for this member on this day
   const dayEvents = events.filter(event => {
+    if (event.isMultiDay) return false; // Exclude multi-day events
     const eventDate = new Date(event.startTime);
-    const targetDate = new Date(currentDate);
     return eventDate.toDateString() === targetDate.toDateString() &&
            event.assignedTo?.includes(member.id);
   });
 
-  // Fixed header height: p-4 (32px) + img (48px) + mb-2 (8px) + text (~20px) + border (4px) = ~112px
-  const HEADER_HEIGHT = 112;
+  // Header height constants
+  // Base: 112px (member header), Each multi-day event adds ~40px
+  // Events align with hour grid at BASE_HEADER_HEIGHT (multi-day banners are sticky and don't push timeline)
+  const BASE_HEADER_HEIGHT = 112;
+  const MULTIDAY_EVENT_HEIGHT = 40;
 
   return (
     <div className="flex-1 relative border-r border-gray-200 min-h-[1520px]">
+      {/* Multi-day Events Banner (Sticky) */}
+      {multiDayEvents.length > 0 && (
+        <div className="sticky top-0 z-40 bg-gradient-to-r from-violet-50 to-purple-50 border-b-2 border-violet-200">
+          {multiDayEvents.map(event => (
+            <MultiDayEventBanner
+              key={event.id}
+              event={event}
+              memberColor={memberColor}
+              onClick={() => onEventClick(event.id)}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* Member Header */}
       <div
         onClick={onHeaderClick}
-        className="sticky top-0 z-30 p-4 text-center border-b border-gray-300 cursor-pointer hover:opacity-90 transition-opacity bg-white/95 backdrop-blur-sm"
-        style={{ borderTop: `4px solid ${memberColor}` }}
+        className="sticky z-30 p-4 text-center border-b border-gray-300 cursor-pointer hover:opacity-90 transition-opacity bg-white/95 backdrop-blur-sm"
+        style={{
+          borderTop: `4px solid ${memberColor}`,
+          top: multiDayEvents.length > 0 ? `${multiDayEvents.length * MULTIDAY_EVENT_HEIGHT}px` : '0'
+        }}
       >
         <img src={member.avatar} alt={member.name} className="w-12 h-12 rounded-full mx-auto mb-2 border-2 border-white shadow-md object-cover" />
         <h3 className="font-bold text-gray-800 text-sm">{member.name}</h3>
       </div>
 
       {/* Events Area - positioned absolutely to align with hour grid */}
-      <div className="absolute left-0 right-0" style={{ top: `${HEADER_HEIGHT}px`, bottom: 0 }}>
+      <div className="absolute left-0 right-0" style={{ top: `${BASE_HEADER_HEIGHT}px`, bottom: 0 }}>
         {dayEvents.map(event => (
           <EventCard key={event.id} event={event} onClick={() => onEventClick(event.id)} />
         ))}
@@ -466,6 +500,45 @@ function EventCard({ event, onClick }) {
           )}
         </div>
       )}
+    </div>
+  );
+}
+
+function MultiDayEventBanner({ event, memberColor, onClick }) {
+  const startDate = new Date(event.startTime);
+  const endDate = new Date(event.endTime);
+
+  // Format dates as DD.MM
+  const formatShortDate = (date) => {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    return `${day}.${month}`;
+  };
+
+  const dateRange = `${formatShortDate(startDate)} - ${formatShortDate(endDate)}`;
+
+  // Icon based on category
+  const getCategoryIcon = () => {
+    switch (event.category) {
+      case 'vacation': return '🏖️';
+      case 'visit': return '👥';
+      case 'work': return '💼';
+      default: return '📅';
+    }
+  };
+
+  return (
+    <div
+      onClick={(e) => { e.stopPropagation(); onClick(); }}
+      className="px-3 py-2 cursor-pointer hover:bg-white/30 transition-colors border-b border-violet-100/50 flex items-center justify-between gap-2"
+    >
+      <div className="flex items-center gap-2 flex-1 min-w-0">
+        <span className="text-lg flex-shrink-0">{getCategoryIcon()}</span>
+        <div className="flex-1 min-w-0">
+          <p className="text-xs font-bold text-violet-900 truncate leading-tight">{event.title}</p>
+          <p className="text-[10px] text-violet-700 font-medium">{dateRange}</p>
+        </div>
+      </div>
     </div>
   );
 }
@@ -558,9 +631,18 @@ function EventDetailModal({ eventId, onClose, onEdit }) {
           <div className="flex items-start justify-between">
             <div className="flex-1">
               <h2 className="text-2xl font-bold text-gray-800 mb-2">{event.title}</h2>
-              <p className="text-gray-600">
-                {startTime.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
-              </p>
+              {event.isMultiDay ? (
+                <div className="flex items-center gap-2">
+                  <span className="text-2xl">🏖️</span>
+                  <p className="text-gray-600">
+                    {startTime.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - {endTime.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                  </p>
+                </div>
+              ) : (
+                <p className="text-gray-600">
+                  {startTime.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                </p>
+              )}
             </div>
             <button
               onClick={onClose}
@@ -573,13 +655,24 @@ function EventDetailModal({ eventId, onClose, onEdit }) {
 
         {/* Content */}
         <div className="flex-1 overflow-y-auto p-6 space-y-4">
-          {/* Time */}
-          <div>
-            <h3 className="text-sm font-semibold text-gray-500 uppercase mb-2">Time</h3>
-            <p className="text-lg text-gray-800">
-              {formatTime(startTime)} - {formatTime(endTime)}
-            </p>
-          </div>
+          {/* Time/Duration */}
+          {!event.isMultiDay && (
+            <div>
+              <h3 className="text-sm font-semibold text-gray-500 uppercase mb-2">Time</h3>
+              <p className="text-lg text-gray-800">
+                {formatTime(startTime)} - {formatTime(endTime)}
+              </p>
+            </div>
+          )}
+
+          {event.isMultiDay && (
+            <div>
+              <h3 className="text-sm font-semibold text-gray-500 uppercase mb-2">Duration</h3>
+              <p className="text-lg text-gray-800">
+                {Math.ceil((endTime - startTime) / (1000 * 60 * 60 * 24))} days
+              </p>
+            </div>
+          )}
 
           {/* Assigned Members */}
           {assignedMembers.length > 0 && (
