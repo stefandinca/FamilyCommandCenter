@@ -21,18 +21,18 @@ export default function NotesView() {
   return (
     <div className="h-full flex flex-col overflow-hidden">
       {/* Header */}
-      <div className="bg-white/80 backdrop-blur-sm p-8 shadow-sm">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent flex items-center gap-3">
-              <span className="text-4xl">📝</span>
+      <div className="bg-white/80 backdrop-blur-sm p-4 md:p-8 shadow-sm">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex-1 min-w-0">
+            <h1 className="text-2xl md:text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent flex items-center gap-2 md:gap-3">
+              <span className="text-2xl md:text-4xl">📝</span>
               <span>Notes</span>
             </h1>
-            <p className="text-gray-500 mt-2 text-lg">Keep track of family notes and lists</p>
+            <p className="text-gray-500 mt-1 md:mt-2 text-sm md:text-lg">Keep track of family notes and lists</p>
           </div>
           <button
             onClick={() => setIsAddingNote(true)}
-            className="btn-primary flex items-center gap-2"
+            className="btn-primary flex items-center gap-2 w-full sm:w-auto justify-center"
           >
             <span className="text-xl">+</span>
             <span>New Note</span>
@@ -41,14 +41,14 @@ export default function NotesView() {
       </div>
 
       {/* Notes Grid */}
-      <div className="flex-1 overflow-y-auto p-8">
+      <div className="flex-1 overflow-y-auto p-4 md:p-8">
         {/* Pinned Section */}
         {pinnedNotes.length > 0 && (
-          <div className="mb-8">
-            <h2 className="text-lg font-semibold text-gray-700 mb-4 flex items-center gap-2">
+          <div className="mb-6 md:mb-8">
+            <h2 className="text-base md:text-lg font-semibold text-gray-700 mb-3 md:mb-4 flex items-center gap-2">
               📌 Pinned Notes
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
               {pinnedNotes.map(note => (
                 <NoteCard
                   key={note.id}
@@ -63,10 +63,10 @@ export default function NotesView() {
         {/* Other Notes */}
         {unpinnedNotes.length > 0 && (
           <div>
-            <h2 className="text-lg font-semibold text-gray-700 mb-4">
+            <h2 className="text-base md:text-lg font-semibold text-gray-700 mb-3 md:mb-4">
               All Notes
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
               {unpinnedNotes.map(note => (
                 <NoteCard
                   key={note.id}

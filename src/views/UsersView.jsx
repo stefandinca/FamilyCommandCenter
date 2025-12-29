@@ -24,18 +24,18 @@ export default function UsersView() {
   return (
     <div className="h-full flex flex-col overflow-hidden">
       {/* Header */}
-      <div className="bg-white/80 backdrop-blur-sm p-8 shadow-sm">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent flex items-center gap-3">
-              <span className="text-4xl">👥</span>
+      <div className="bg-white/80 backdrop-blur-sm p-4 md:p-8 shadow-sm">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex-1 min-w-0">
+            <h1 className="text-2xl md:text-4xl font-bold bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent flex items-center gap-2 md:gap-3">
+              <span className="text-2xl md:text-4xl">👥</span>
               <span>Family Members</span>
             </h1>
-            <p className="text-gray-500 mt-2 text-lg">Manage your family member profiles</p>
+            <p className="text-gray-500 mt-1 md:mt-2 text-sm md:text-lg">Manage your family member profiles</p>
           </div>
           <button
             onClick={() => setIsAddingMember(true)}
-            className="bg-gradient-to-r from-indigo-500 to-blue-500 text-white px-6 py-3 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105 flex items-center gap-2"
+            className="bg-gradient-to-r from-indigo-500 to-blue-500 text-white px-4 md:px-6 py-2 md:py-3 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105 flex items-center gap-2 w-full sm:w-auto justify-center text-sm md:text-base"
           >
             <span className="text-xl">+</span>
             <span>Add Member</span>
@@ -44,9 +44,9 @@ export default function UsersView() {
       </div>
 
       {/* Members Grid */}
-      <div className="flex-1 overflow-y-auto p-8">
+      <div className="flex-1 overflow-y-auto p-4 md:p-8">
         {members.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
             {members.map(member => (
               <MemberCard
                 key={member.id}

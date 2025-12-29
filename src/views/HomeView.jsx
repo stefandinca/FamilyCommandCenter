@@ -72,19 +72,19 @@ export default function HomeView() {
   return (
     <div className="h-full flex flex-col overflow-hidden">
       {/* Header */}
-      <div className="bg-white/80 backdrop-blur-sm p-8 shadow-sm">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-violet-600 to-purple-600 bg-clip-text text-transparent">
+      <div className="bg-white/80 backdrop-blur-sm p-4 md:p-8 shadow-sm">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex-1 min-w-0">
+            <h1 className="text-2xl md:text-4xl font-bold bg-gradient-to-r from-violet-600 to-purple-600 bg-clip-text text-transparent">
               Good {now.getHours() < 12 ? 'morning' : now.getHours() < 18 ? 'afternoon' : 'evening'}!
             </h1>
-            <p className="text-gray-500 mt-2 text-lg">Here's what's happening with your family</p>
+            <p className="text-gray-500 mt-1 md:mt-2 text-sm md:text-lg">Here's what's happening with your family</p>
           </div>
-          <div className="text-right bg-gradient-to-br from-violet-500 to-purple-600 text-white px-8 py-4 rounded-2xl shadow-lg">
-            <p className="text-sm font-medium opacity-90">
+          <div className="text-right bg-gradient-to-br from-violet-500 to-purple-600 text-white px-4 md:px-8 py-3 md:py-4 rounded-2xl shadow-lg w-full sm:w-auto">
+            <p className="text-xs md:text-sm font-medium opacity-90">
               {now.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}
             </p>
-            <p className="text-3xl font-bold mt-1">
+            <p className="text-2xl md:text-3xl font-bold mt-1">
               {now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
             </p>
           </div>
@@ -92,12 +92,12 @@ export default function HomeView() {
       </div>
 
       {/* Dashboard Content */}
-      <div className="flex-1 overflow-y-auto p-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="flex-1 overflow-y-auto p-4 md:p-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8">
           {/* Who's Where Section */}
-          <div className="card-modern p-8">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
-              <span className="text-3xl">📍</span>
+          <div className="card-modern p-4 md:p-8">
+            <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4 md:mb-6 flex items-center gap-2 md:gap-3">
+              <span className="text-2xl md:text-3xl">📍</span>
               <span>Who's Where</span>
             </h2>
             <div className="space-y-3">
@@ -116,9 +116,9 @@ export default function HomeView() {
           </div>
 
           {/* Upcoming Events Section */}
-          <div className="card-modern p-8">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
-              <span className="text-3xl">📅</span>
+          <div className="card-modern p-4 md:p-8">
+            <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4 md:mb-6 flex items-center gap-2 md:gap-3">
+              <span className="text-2xl md:text-3xl">📅</span>
               <span>Upcoming Events</span>
             </h2>
             <div className="space-y-3">
@@ -137,9 +137,9 @@ export default function HomeView() {
           </div>
 
           {/* Pinned Notes Section */}
-          <div className="card-modern p-8">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
-              <span className="text-3xl">📌</span>
+          <div className="card-modern p-4 md:p-8">
+            <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4 md:mb-6 flex items-center gap-2 md:gap-3">
+              <span className="text-2xl md:text-3xl">📌</span>
               <span>Pinned Notes</span>
             </h2>
             <div className="space-y-3">
@@ -157,9 +157,9 @@ export default function HomeView() {
           </div>
 
           {/* Shopping Lists Section */}
-          <div className="card-modern p-8">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
-              <span className="text-3xl">🛒</span>
+          <div className="card-modern p-4 md:p-8">
+            <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4 md:mb-6 flex items-center gap-2 md:gap-3">
+              <span className="text-2xl md:text-3xl">🛒</span>
               <span>Shopping Lists</span>
             </h2>
             <div className="space-y-3">

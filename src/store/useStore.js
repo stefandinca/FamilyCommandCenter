@@ -5,6 +5,10 @@ const getInitialState = () => ({
   members: [], // This will eventually be fetched from Firebase Auth and Firestore users collection
   notes: [],
   meals: [],
+  budgets: [],
+  expenses: [],
+  bills: [],
+  billPayments: [],
   lists: [], // Not present in original initialState, but good to keep if lists are a feature
   templates: [], // Not present in original initialState
   activeView: 'home', // 'home', 'calendar', 'notes', 'meals', 'shopping', 'users'
@@ -78,6 +82,56 @@ export const useStore = create((set) => ({
   })),
   deleteMeal: (mealId) => set((state) => ({
     meals: state.meals.filter((meal) => meal.id !== mealId),
+  })),
+
+  // Budgets
+  setBudgets: (budgets) => set({ budgets }),
+  addBudget: (budget) => set((state) => ({ budgets: [...state.budgets, budget] })),
+  updateBudget: (updatedBudget) => set((state) => ({
+    budgets: state.budgets.map((budget) =>
+      budget.id === updatedBudget.id ? updatedBudget : budget
+    ),
+  })),
+  deleteBudget: (budgetId) => set((state) => ({
+    budgets: state.budgets.filter((budget) => budget.id !== budgetId),
+  })),
+
+  // Expenses
+  setExpenses: (expenses) => set({ expenses }),
+  addExpense: (expense) => set((state) => ({ expenses: [...state.expenses, expense] })),
+  updateExpense: (updatedExpense) => set((state) => ({
+    expenses: state.expenses.map((expense) =>
+      expense.id === updatedExpense.id ? updatedExpense : expense
+    ),
+  })),
+  deleteExpense: (expenseId) => set((state) => ({
+    expenses: state.expenses.filter((expense) => expense.id !== expenseId),
+  })),
+
+  // Bills
+  setBills: (bills) => set({ bills }),
+  addBill: (bill) => set((state) => ({ bills: [...state.bills, bill] })),
+  updateBill: (updatedBill) => set((state) => ({
+    bills: state.bills.map((bill) =>
+      bill.id === updatedBill.id ? updatedBill : bill
+    ),
+  })),
+  deleteBill: (billId) => set((state) => ({
+    bills: state.bills.filter((bill) => bill.id !== billId),
+  })),
+
+  // Bill Payments
+  setBillPayments: (payments) => set({ billPayments: payments }),
+  addBillPayment: (payment) => set((state) => ({
+    billPayments: [...state.billPayments, payment]
+  })),
+  updateBillPayment: (updatedPayment) => set((state) => ({
+    billPayments: state.billPayments.map((payment) =>
+      payment.id === updatedPayment.id ? updatedPayment : payment
+    ),
+  })),
+  deleteBillPayment: (paymentId) => set((state) => ({
+    billPayments: state.billPayments.filter((p) => p.id !== paymentId),
   })),
 
   updateMember: (updatedMember) => set((state) => ({

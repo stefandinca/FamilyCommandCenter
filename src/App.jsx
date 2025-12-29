@@ -5,6 +5,10 @@ import {
   subscribeToMembers,
   subscribeToNotes,
   subscribeToMeals,
+  subscribeToBudgets,
+  subscribeToExpenses,
+  subscribeToBills,
+  subscribeToBillPayments,
   seedDatabase
 } from './services/firestoreService';
 import MainLayout from './layouts/MainLayout';
@@ -14,10 +18,12 @@ import NotesView from './views/NotesView';
 import MealsView from './views/MealsView';
 import ShoppingView from './views/ShoppingView';
 import UsersView from './views/UsersView';
+import BudgetView from './views/BudgetView';
+import BillsView from './views/BillsView';
 
 function App() {
   const {
-    setEvents, setMembers, setNotes, setMeals, events, activeView
+    setEvents, setMembers, setNotes, setMeals, setBudgets, setExpenses, setBills, setBillPayments, events, activeView
   } = useStore();
 
   useEffect(() => {
@@ -26,6 +32,10 @@ function App() {
     const unsubMembers = subscribeToMembers(setMembers);
     const unsubNotes = subscribeToNotes(setNotes);
     const unsubMeals = subscribeToMeals(setMeals);
+    const unsubBudgets = subscribeToBudgets(setBudgets);
+    const unsubExpenses = subscribeToExpenses(setExpenses);
+    const unsubBills = subscribeToBills(setBills);
+    const unsubBillPayments = subscribeToBillPayments(setBillPayments);
 
     // 2. Cleanup listeners on unmount
     return () => {
@@ -33,8 +43,12 @@ function App() {
       unsubMembers();
       unsubNotes();
       unsubMeals();
+      unsubBudgets();
+      unsubExpenses();
+      unsubBills();
+      unsubBillPayments();
     };
-  }, [setEvents, setMembers, setNotes, setMeals]);
+  }, [setEvents, setMembers, setNotes, setMeals, setBudgets, setExpenses, setBills, setBillPayments]);
 
   const handleSeed = async () => {
     if (confirm("This will add sample data to your Firestore database. Continue?")) {
@@ -82,6 +96,10 @@ function App() {
         return <MealsView />;
       case 'shopping':
         return <ShoppingView />;
+      case 'budget':
+        return <BudgetView />;
+      case 'bills':
+        return <BillsView />;
       case 'users':
         return <UsersView />;
       default:

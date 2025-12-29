@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useStore } from '../store/useStore';
-import { addNote, updateNote, deleteNote } from '../services/firestoreService';
+import { addNote, updateNote, deleteNote, addExpense } from '../services/firestoreService';
 
 const STORE_CATEGORIES = [
   { name: 'Grocery', icon: '🛒', color: 'green' },
@@ -20,18 +20,18 @@ export default function ShoppingView() {
   return (
     <div className="h-full flex flex-col overflow-hidden">
       {/* Header */}
-      <div className="bg-white/80 backdrop-blur-sm p-8 shadow-sm">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent flex items-center gap-3">
-              <span className="text-4xl">🛒</span>
+      <div className="bg-white/80 backdrop-blur-sm p-4 md:p-8 shadow-sm">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex-1 min-w-0">
+            <h1 className="text-2xl md:text-4xl font-bold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent flex items-center gap-2 md:gap-3">
+              <span className="text-2xl md:text-4xl">🛒</span>
               <span>Shopping Lists</span>
             </h1>
-            <p className="text-gray-500 mt-2 text-lg">Manage your shopping and errands</p>
+            <p className="text-gray-500 mt-1 md:mt-2 text-sm md:text-lg">Manage your shopping and errands</p>
           </div>
           <button
             onClick={() => setIsAddingList(true)}
-            className="bg-gradient-to-r from-emerald-500 to-green-500 text-white px-6 py-3 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105 flex items-center gap-2"
+            className="bg-gradient-to-r from-emerald-500 to-green-500 text-white px-4 md:px-6 py-2 md:py-3 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105 flex items-center gap-2 w-full sm:w-auto justify-center text-sm md:text-base"
           >
             <span className="text-xl">+</span>
             <span>New List</span>
@@ -40,9 +40,9 @@ export default function ShoppingView() {
       </div>
 
       {/* Shopping Lists Grid */}
-      <div className="flex-1 overflow-y-auto p-8">
+      <div className="flex-1 overflow-y-auto p-4 md:p-8">
         {shoppingLists.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
             {shoppingLists.map(list => (
               <ShoppingListCard
                 key={list.id}
@@ -76,6 +76,8 @@ export default function ShoppingView() {
 }
 
 function ShoppingListCard({ list, onEdit }) {
+  const { budgets } = useStore();
+
   const handleToggleItem = async (itemId) => {
     const updatedItems = list.items.map(item =>
       item.id === itemId ? { ...item, completed: !item.completed } : item
@@ -95,6 +97,55 @@ function ShoppingListCard({ list, onEdit }) {
         console.error(error);
         alert("Error deleting shopping list: " + error.message);
       }
+    }
+  };
+
+  const handleAddToBudget = async () => {
+    // Find active budget
+    const activeBudget = budgets.find(b => b.isActive) || budgets[0];
+
+    if (!activeBudget) {
+      alert('Please create a budget first before adding expenses.');
+      return;
+    }
+
+    // Find Groceries category (or first category as fallback)
+    const groceryCategory = activeBudget.categories?.find(c =>
+      c.name.toLowerCase() === 'groceries' || c.name.toLowerCase() === 'grocery'
+    ) || activeBudget.categories?.[0];
+
+    if (!groceryCategory) {
+      alert('No budget categories found. Please add categories to your budget first.');
+      return;
+    }
+
+    // Prompt for amount
+    const amountStr = prompt(`Enter total amount spent for "${list.title}":`, '');
+    if (!amountStr) return;
+
+    const amount = parseFloat(amountStr);
+    if (isNaN(amount) || amount <= 0) {
+      alert('Please enter a valid amount');
+      return;
+    }
+
+    // Create expense
+    try {
+      await addExpense({
+        budgetId: activeBudget.id,
+        categoryId: groceryCategory.id,
+        amount: amount,
+        description: list.title,
+        date: new Date().toISOString().split('T')[0],
+        paymentMethod: 'credit',
+        tags: ['shopping-list'],
+        createdAt: new Date().toISOString()
+      });
+
+      alert(`Added ${amount.toFixed(2)} RON expense to ${activeBudget.name}`);
+    } catch (error) {
+      console.error(error);
+      alert('Error adding expense: ' + error.message);
     }
   };
 
@@ -174,6 +225,19 @@ function ShoppingListCard({ list, onEdit }) {
       {/* Empty list message */}
       {(!list.items || list.items.length === 0) && (
         <p className="text-sm text-gray-400 italic">No items added yet</p>
+      )}
+
+      {/* Add to Budget Button */}
+      {totalCount > 0 && (
+        <div className="mt-4 pt-4 border-t border-gray-200">
+          <button
+            onClick={handleAddToBudget}
+            className="w-full py-2.5 px-4 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white rounded-lg font-medium shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-2"
+          >
+            <span>💰</span>
+            <span>Add to Budget</span>
+          </button>
+        </div>
       )}
     </div>
   );

@@ -19,6 +19,10 @@ const EVENTS_COLLECTION = "events";
 const MEMBERS_COLLECTION = "users"; // Mapping members to users
 const NOTES_COLLECTION = "notes";
 const MEALS_COLLECTION = "meals";
+const BUDGETS_COLLECTION = "budgets";
+const EXPENSES_COLLECTION = "expenses";
+const BILLS_COLLECTION = "bills";
+const BILL_PAYMENTS_COLLECTION = "bill_payments";
 
 // --- Real-time Listeners (Sync) ---
 
@@ -51,6 +55,38 @@ export const subscribeToMeals = (callback) => {
   return onSnapshot(q, (snapshot) => {
     const meals = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
     callback(meals);
+  });
+};
+
+export const subscribeToBudgets = (callback) => {
+  const q = query(collection(db, BUDGETS_COLLECTION));
+  return onSnapshot(q, (snapshot) => {
+    const budgets = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    callback(budgets);
+  });
+};
+
+export const subscribeToExpenses = (callback) => {
+  const q = query(collection(db, EXPENSES_COLLECTION));
+  return onSnapshot(q, (snapshot) => {
+    const expenses = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    callback(expenses);
+  });
+};
+
+export const subscribeToBills = (callback) => {
+  const q = query(collection(db, BILLS_COLLECTION), where('isActive', '==', true));
+  return onSnapshot(q, (snapshot) => {
+    const bills = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    callback(bills);
+  });
+};
+
+export const subscribeToBillPayments = (callback) => {
+  const q = query(collection(db, BILL_PAYMENTS_COLLECTION));
+  return onSnapshot(q, (snapshot) => {
+    const payments = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    callback(payments);
   });
 };
 
@@ -113,6 +149,66 @@ export const updateMeal = async (id, mealData) => {
 
 export const deleteMeal = async (id) => {
   const docRef = doc(db, MEALS_COLLECTION, id);
+  await deleteDoc(docRef);
+};
+
+// Budgets
+export const addBudget = async (budgetData) => {
+  return await addDoc(collection(db, BUDGETS_COLLECTION), budgetData);
+};
+
+export const updateBudget = async (id, budgetData) => {
+  const docRef = doc(db, BUDGETS_COLLECTION, id);
+  await updateDoc(docRef, budgetData);
+};
+
+export const deleteBudget = async (id) => {
+  const docRef = doc(db, BUDGETS_COLLECTION, id);
+  await deleteDoc(docRef);
+};
+
+// Expenses
+export const addExpense = async (expenseData) => {
+  return await addDoc(collection(db, EXPENSES_COLLECTION), expenseData);
+};
+
+export const updateExpense = async (id, expenseData) => {
+  const docRef = doc(db, EXPENSES_COLLECTION, id);
+  await updateDoc(docRef, expenseData);
+};
+
+export const deleteExpense = async (id) => {
+  const docRef = doc(db, EXPENSES_COLLECTION, id);
+  await deleteDoc(docRef);
+};
+
+// Bills
+export const addBill = async (billData) => {
+  return await addDoc(collection(db, BILLS_COLLECTION), billData);
+};
+
+export const updateBill = async (id, billData) => {
+  const docRef = doc(db, BILLS_COLLECTION, id);
+  await updateDoc(docRef, billData);
+};
+
+export const deleteBill = async (id) => {
+  const docRef = doc(db, BILLS_COLLECTION, id);
+  await deleteDoc(docRef);
+};
+
+// Bill Payments
+export const addBillPayment = async (paymentData) => {
+  return await addDoc(collection(db, BILL_PAYMENTS_COLLECTION), paymentData);
+};
+
+export const updateBillPayment = async (id, paymentData) => {
+  const docRef = doc(db, BILL_PAYMENTS_COLLECTION, id);
+  await updateDoc(docRef, paymentData);
+};
+
+export const deleteBillPayment = async (id) => {
+  const docRef = doc(db, BILL_PAYMENTS_COLLECTION, id);
   await deleteDoc(docRef);
 };
 
